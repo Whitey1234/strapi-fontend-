@@ -2,15 +2,16 @@
 import { Menu, X, BookOpen, Users, Award, ArrowRight, PlayCircle, CheckCircle, Star } from 'lucide-react';
 import Link from 'next/link';
 import { Router } from 'next/router';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Header() {
    const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [users, setUsers] = useState(null);
 
-const storedUser = localStorage.getItem("user");
-const user = storedUser ? JSON.parse(storedUser) : null;
-console.log("user")
+// const storedUser = localStorage.getItem("user");
+// const user = storedUser ? JSON.parse(storedUser) : null;
+//console.log(user)
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +20,18 @@ console.log("user")
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  // for user data
+  useEffect(()=>{
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      setUsers(JSON.parse(storedUser));
+    }
+
+  },[])
+   const role = users?.role?.name
+
+  // Logout function
   const handleLogout =()=>{
     localStorage.removeItem("user")
     localStorage.removeItem("token")
@@ -60,10 +73,10 @@ console.log("user")
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-1">
-            {['Home', 'Courses', 'Features', 'Testimonials'].map((item) => (
+            {[, 'Courses', 'Features', 'Testimonials'].map((item) => (
               <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={`/${item.toLowerCase()}`}
                 className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 group ${
                   scrolled ? 'text-gray-700' : 'text-gray-800'
                 }`}
@@ -73,10 +86,25 @@ console.log("user")
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
               </Link>
+              
             ))}
+            {
+              role ==='student' && (
+                <Link className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 group ${
+                  scrolled ? 'text-gray-700' : 'text-gray-800'
+                }`} href={''}>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                  Classes
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                
+                </Link>
+              )
+            }
+            
             
             {/* Login Button with Advanced Effect */}
-            {user ?( <div className='relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group'>
+            {users ?( <div className='relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group'>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
               <button onClick={handleLogout} className="relative z-10 flex items-center">
@@ -96,7 +124,8 @@ console.log("user")
                 <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
               </span>
               <div className="absolute inset-0 rounded-full ring-2 ring-blue-400 opacity-0 group-hover:opacity-100 group-hover:ring-4 transition-all duration-300"></div>
-            </Link>)}
+            </Link>)
+            }
            
           </div>
 
@@ -128,10 +157,10 @@ console.log("user")
       }`}>
         <div className="bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-lg">
           <div className="px-4 py-6 space-y-3">
-            {['Home', 'Courses', 'Features', 'Testimonials'].map((item, index) => (
+            {[, 'Courses', 'Features', 'Testimonials'].map((item, index) => (
               <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={`/${item.toLowerCase()}`}
                 onClick={() => setIsOpen(false)}
                 className="block px-4 py-3 text-gray-700 hover:text-white bg-gray-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-2xl transition-all duration-300 transform hover:translate-x-2"
                 style={{
@@ -141,13 +170,43 @@ console.log("user")
                 {item}
               </Link>
             ))}
-            <Link
+            {/* role based dash board  */}
+            {
+              role ==='student' && (
+                <Link className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 group ${
+                  scrolled ? 'text-gray-700' : 'text-gray-800'
+                }`} href={''}>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                  Classes
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                
+                </Link>
+              )
+            }
+
+           {users ?( <div className='relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group'>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+              <button onClick={handleLogout} className="relative z-10 flex items-center">
+                Logout
+                <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+              <div className="absolute inset-0 rounded-full ring-2 ring-blue-400 opacity-0 group-hover:opacity-100 group-hover:ring-4 transition-all duration-300"></div>
+        {/* <button onClick={handleLogout}>Logout</button> */}
+      </div>) : ( <Link
               href="/login"
-              onClick={() => setIsOpen(false)}
-              className="block px-4 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-center font-semibold"
+              className="relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group"
             >
-              Login
-            </Link>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+              <span className="relative z-10 flex items-center">
+                Login
+                <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+              </span>
+              <div className="absolute inset-0 rounded-full ring-2 ring-blue-400 opacity-0 group-hover:opacity-100 group-hover:ring-4 transition-all duration-300"></div>
+            </Link>)
+            }
           </div>
         </div>
       </div>
