@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { PlayCircle, CheckCircle, Clock, Video, Loader2, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "next/navigation";
-
-
+import withAuth from "@/components/withAuth";
 
 const LessonsPage = () => {
   const [lessons, setLessons] = useState([]);
@@ -12,8 +11,8 @@ const LessonsPage = () => {
   const [completedLessons, setCompletedLessons] = useState([]);
   const [expandedLesson, setExpandedLesson] = useState(null);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
-const {moduleId} = useParams();
-console.log(moduleId)
+  const {moduleId} = useParams();
+
   useEffect(() => {
     const fetchLessons = async () => {
       try {
@@ -33,9 +32,8 @@ console.log(moduleId)
     };
 
     fetchLessons();
-  }, []);
+  }, [moduleId]);
 
-  // Helper to convert YouTube URL to embed URL
   const getEmbedUrl = (url) => {
     if (!url) return "";
     const videoId = url.split("youtu.be/")[1]?.split("?")[0] || url.split("v=")[1]?.split("&")[0];
@@ -91,7 +89,6 @@ console.log(moduleId)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 ">
-      {/* Header Section */}
       <div className="bg-gradient-to-rbg-gradient-to-br from-blue-50 via-white to-purple-50 text-black">
         <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8 ">
           <div className="flex items-center gap-3 mb-4 mt-20">
@@ -103,7 +100,6 @@ console.log(moduleId)
             {lessons.length} lesson{lessons.length !== 1 ? 's' : ''} to master this module
           </p>
 
-          {/* Progress Bar */}
           <div className="bg-blue-200 rounded-full h-3 backdrop-blur-sm overflow-hidden">
             <div
               className="bg-gradient-to-r from-blue-500 via-pink-400 to-purple-300 h-full rounded-full transition-all duration-500 shadow-lg p-2"
@@ -119,13 +115,11 @@ console.log(moduleId)
         </div>
       </div>
 
-      {/* Lessons List */}
       <div className="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-4">
           {lessons.map((lesson, index) => {
             const isCompleted = completedLessons.includes(lesson.id);
             const isExpanded = expandedLesson === lesson.id;
-            const isPlaying = currentlyPlaying === lesson.id;
 
             return (
               <div
@@ -138,13 +132,11 @@ console.log(moduleId)
                     : "border-transparent"
                 }`}
               >
-                {/* Lesson Header */}
                 <div
                   className="p-6 cursor-pointer"
                   onClick={() => toggleExpand(lesson.id)}
                 >
                   <div className="flex items-start gap-4">
-                    {/* Lesson Number */}
                     <div
                       className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-all ${
                         isCompleted
@@ -159,7 +151,6 @@ console.log(moduleId)
                       )}
                     </div>
 
-                    {/* Lesson Info */}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
                         {lesson.title}
@@ -183,7 +174,6 @@ console.log(moduleId)
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={(e) => {
@@ -208,10 +198,8 @@ console.log(moduleId)
                   </div>
                 </div>
 
-                {/* Expanded Content */}
                 {isExpanded && (
                   <div className="px-6 pb-6 space-y-4 animate-fadeIn">
-                    {/* Full Description */}
                     <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
                       <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
                         <BookOpen className="h-5 w-5 text-indigo-600" />
@@ -223,7 +211,6 @@ console.log(moduleId)
                       </p>
                     </div>
 
-                    {/* Video Player */}
                     {lesson.videoUrl && (
                       <div className="relative rounded-xl overflow-hidden shadow-2xl bg-black">
                         <div className="relative" style={{ paddingBottom: "56.25%" }}>
@@ -245,7 +232,6 @@ console.log(moduleId)
           })}
         </div>
 
-        {/* Completion Message */}
         {completionPercentage === 100 && (
           <div className="mt-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-8 text-white text-center shadow-xl">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
@@ -262,4 +248,4 @@ console.log(moduleId)
   );
 };
 
-export default LessonsPage;
+export default withAuth(LessonsPage);

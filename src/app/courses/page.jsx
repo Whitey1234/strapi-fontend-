@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
-import { Router, } from "next/router";
 import { useRouter } from "next/navigation";
+import { Edit, Trash2, PlusCircle } from "lucide-react"; // ✅ Lucide Icons
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const router = useRouter()
+  const [users, setUsers] = useState(null);
+  const router = useRouter();
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -29,58 +30,116 @@ export default function CoursesPage() {
     fetchCourses();
   }, []);
 
+  // Get user and role
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUsers(JSON.parse(storedUser));
+  }, []);
+
+  const role = users?.role?.name;
+  console.log(role)
+  const canManage = role === "manager" || role === "developer"; // ✅ Check role
+  
+  // Delete Course
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this course?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/courses/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCourses(courses.filter((c) => c.id !== id));
+      alert("Course deleted successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete course.");
+    }
+  };
+
   if (loading) return <p className="text-center mt-10">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-center mb-10 mt-14">Our Courses</h1>
+      <div className="flex justify-between items-center mb-10 mt-14">
+        <h1 className="text-3xl font-bold">Our Courses</h1>
 
+        {/* ✅ Add New Course Button for Manager/Developer */}
+        {canManage && (
+          <button
+            onClick={() => router.push("/courses/create")}
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            <PlusCircle size={20} />
+            Add New Course
+          </button>
+        )}
+      </div>
+
+      {/* Courses Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {courses.map((course) => {
-          const data = course; // data already flattened
           const img =
-            data.image?.url &&
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.image.url}`;
+            course.image?.url &&
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}`;
 
           return (
             <div
-              key={data.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition "
+              key={course.id}
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition"
             >
               {/* Course Image */}
               <img
                 src={img}
-                alt={data.title}
+                alt={course.title}
                 className="h-48 w-full object-cover"
               />
 
-              {/* Content */}
+              {/* Course Content */}
               <div className="p-5 space-y-3">
-                <h2 className="text-xl font-semibold">{data.title}</h2>
-
-                {/* use description field */}
+                <h2 className="text-xl font-semibold">{course.title}</h2>
                 <p className="text-gray-600 text-sm line-clamp-3">
-                  {data.discription}
+                  {course.discription}
                 </p>
 
                 <div className="flex items-center justify-between mt-4">
                   <span className="text-blue-600 font-bold text-lg">
-                    ${data.Price}
+                    ${course.Price}
                   </span>
                   <span className="text-sm text-gray-500">
-                    ⏳ {data.duration}
+                    ⏳ {course.duration}
                   </span>
                 </div>
-                <button className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition"
-                  onClick={()=> router.push(`/courses/${data.id}`)}
+
+                {/* View Details Button */}
+                <button
+                  onClick={() => router.push(`/courses/${course.id}`)}
+                  className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition"
                 >
-                   View Details
+                  View Details
                 </button>
 
-                {/* <Link href={`/courses/${data.id}`} className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition">
-                  Enroll Now
-                </Link> */}
+                {/* ✅ Manager/Developer Controls */}
+                {canManage && (
+                  <div className="flex gap-3 mt-4">
+                    <button
+                      onClick={() => router.push(`/courses/${course.id}/edit`)}
+                      className="flex-1 flex items-center justify-center gap-1 bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition"
+                    >
+                      <Edit size={18} /> Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(course.id)}
+                      className="flex-1 flex items-center justify-center gap-1 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition"
+                    >
+                      <Trash2 size={18} /> Delete
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           );

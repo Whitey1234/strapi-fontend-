@@ -62,7 +62,9 @@ export default function Register() {
 
       // ✅ now safely use res.data
       localStorage.setItem("token", res.data.jwt);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       alert("Registration successful!");
+      router.push('/')
     } catch (err) {
       console.error("Register error:", err.response?.data);
       setError(err.response?.data?.error?.message || "Something went wrong");

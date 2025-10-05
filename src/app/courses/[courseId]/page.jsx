@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
+import withAuth from "@/components/withAuth";
 
-export default function CourseDetailsPage() {
+function CourseDetailsPage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,3 +83,5 @@ export default function CourseDetailsPage() {
     </div>
   );
 }
+
+export default withAuth(CourseDetailsPage);

@@ -1,14 +1,16 @@
 'use client'
-import { Menu, X, BookOpen, Users, Award, ArrowRight, PlayCircle, CheckCircle, Star } from 'lucide-react';
+
+import { ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
-import { Router } from 'next/router';
+import { useRouter } from 'next/navigation';
+
 import React, { useEffect, useState } from 'react'
 
 export default function Header() {
    const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [users, setUsers] = useState(null);
-
+const router = useRouter()
 // const storedUser = localStorage.getItem("user");
 // const user = storedUser ? JSON.parse(storedUser) : null;
 //console.log(user)
@@ -35,7 +37,7 @@ export default function Header() {
   const handleLogout =()=>{
     localStorage.removeItem("user")
     localStorage.removeItem("token")
-    Router.push('/login')
+    router.push('/login')
   }
   return (
 
@@ -102,7 +104,7 @@ export default function Header() {
               )
             }
             
-            
+            {console.log(users)}
             {/* Login Button with Advanced Effect */}
             {users ?( <div className='relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group'>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>

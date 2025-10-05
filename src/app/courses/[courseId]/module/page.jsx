@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { BookOpen, Clock, ChevronRight, Loader2, AlertCircle, GraduationCap, PlayCircle } from "lucide-react";
+import { BookOpen, Clock, ChevronRight, Loader2, AlertCircle, GraduationCap, PlayCircle, PlusCircle, Edit, Trash2 } from "lucide-react";
+import withAuth from "@/components/withAuth";
 
-export default function ModuleListPage() {
+function ModuleListPage() {
   const { courseId } = useParams();
   const router = useRouter();
 
@@ -13,6 +14,7 @@ export default function ModuleListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [users, setUsers] = useState(null);
 
   useEffect(() => {
     const fetchModules = async () => {
@@ -33,6 +35,32 @@ export default function ModuleListPage() {
 
     if (courseId) fetchModules();
   }, [courseId]);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUsers(JSON.parse(storedUser));
+  }, []);
+
+  const role = users?.role?.name;
+  const canManage = role === "manager" || role === "admin";
+
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this module?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/modules?filters[course][id][$eq]=${courseId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setModules(modules.filter((m) => m.id !== id));
+      alert("Module deleted successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete module.");
+    }
+  };
   console.log(modules)
 
   if (loading) {
@@ -104,6 +132,18 @@ export default function ModuleListPage() {
               <span className="font-semibold">Interactive Learning</span>
             </div>
           </div>
+
+          {canManage && (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => router.push(`/courses/${courseId}/module/create`)}
+                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                <PlusCircle size={20} />
+                Add New Module
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Wave decoration */}
@@ -182,6 +222,24 @@ export default function ModuleListPage() {
                         hoveredCard === mod.id ? 'translate-x-1' : ''
                       }`} />
                     </button>
+
+                    {canManage && (
+                      <div className="flex gap-3 mt-4">
+                        <button
+                          onClick={() => router.push(`/courses/${courseId}/module/${mod.id}/edit`)}
+                          className="flex-1 flex items-center justify-center gap-1 bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition"
+                        >
+                          <Edit size={18} /> Edit
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(mod.id)}
+                          className="flex-1 flex items-center justify-center gap-1 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition"
+                        >
+                          <Trash2 size={18} /> Delete
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Hover effect gradient */}
@@ -195,3 +253,5 @@ export default function ModuleListPage() {
     </div>
   );
 }
+
+export default withAuth(ModuleListPage);

@@ -51,7 +51,7 @@ export default function Login() {
       const roleName = user.role?.name?.toLowerCase(); // normalize
       console.log("User role:", roleName);
 
-      if (roleName === "student") router.push("/student-dashboard");
+      if (roleName === "student") router.push("/courses");
       else if (roleName === "manager") router.push("/manager-dashboard");
       else router.push("/"); // default
 
