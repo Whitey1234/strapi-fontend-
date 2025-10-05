@@ -23,22 +23,35 @@ const router = useRouter()
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // for user data
-  useEffect(()=>{
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      setUsers(JSON.parse(storedUser));
-    }
-
-  },[])
-   const role = users?.role?.name
-
-  // Logout function
   const handleLogout =()=>{
     localStorage.removeItem("user")
     localStorage.removeItem("token")
+    window.dispatchEvent(new Event('localStorageChange'));
     router.push('/login')
+    router.refresh()
   }
+
+  useEffect(()=>{
+    const handleStorageChange = () => {
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        setUsers(JSON.parse(storedUser));
+      } else {
+        setUsers(null);
+      }
+    };
+
+    window.addEventListener('localStorageChange', handleStorageChange);
+    window.addEventListener('storage', handleStorageChange); // For changes in other tabs/windows
+
+    // Initial check
+    handleStorageChange();
+
+    return () => {
+      window.removeEventListener('localStorageChange', handleStorageChange);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  },[])
   return (
 
 // Navigation Component with Scroll Effe
@@ -90,7 +103,7 @@ const router = useRouter()
               </Link>
               
             ))}
-            {
+            {/* {
               role ==='student' && (
                 <Link className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 group ${
                   scrolled ? 'text-gray-700' : 'text-gray-800'
@@ -102,7 +115,7 @@ const router = useRouter()
                 
                 </Link>
               )
-            }
+            } */}
             
             {console.log(users)}
             {/* Login Button with Advanced Effect */}
@@ -173,7 +186,7 @@ const router = useRouter()
               </Link>
             ))}
             {/* role based dash board  */}
-            {
+            {/* {
               role ==='student' && (
                 <Link className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 group ${
                   scrolled ? 'text-gray-700' : 'text-gray-800'
@@ -185,7 +198,7 @@ const router = useRouter()
                 
                 </Link>
               )
-            }
+            } */}
 
            {users ?( <div className='relative ml-4 px-6 py-2.5 text-sm font-semibold text-white rounded-full overflow-hidden group'>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>

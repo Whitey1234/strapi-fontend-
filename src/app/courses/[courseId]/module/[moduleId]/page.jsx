@@ -17,7 +17,7 @@ const LessonsPage = () => {
     const fetchLessons = async () => {
       try {
         const res = await fetch(
-          `http://localhost:1337/api/lessons?filters[module][id][$eq]=${moduleId}&populate=*`
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/lessons?filters[module][id][$eq]=${moduleId}&populate=*`
         );
         const data = await res.json();
         setLessons(data.data);

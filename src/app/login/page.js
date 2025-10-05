@@ -46,6 +46,7 @@ export default function Login() {
 
       // Store user in localStorage
       localStorage.setItem("user", JSON.stringify(user));
+      window.dispatchEvent(new Event('localStorageChange'));
 
       // 3️⃣ Redirect based on role
       const roleName = user.role?.name?.toLowerCase(); // normalize
@@ -54,6 +55,7 @@ export default function Login() {
       if (roleName === "student") router.push("/courses");
       else if (roleName === "manager") router.push("/manager-dashboard");
       else router.push("/"); // default
+      router.refresh();
 
     } catch (err) {
       console.log(err.response?.data || err);
