@@ -53,7 +53,7 @@ export default function Login() {
       console.log("User role:", roleName);
 
       if (roleName === "student") router.push("/courses");
-      else if (roleName === "manager") router.push("/manager-dashboard");
+      else if (roleName === "manager") router.push("/courses");
       else router.push("/"); // default
       router.refresh();
 
