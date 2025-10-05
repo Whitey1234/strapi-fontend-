@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+import { Router, } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const router = useRouter()
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -69,10 +72,15 @@ export default function CoursesPage() {
                     ⏳ {data.duration}
                   </span>
                 </div>
-
-                <button className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition">
-                  Enroll Now
+                <button className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition"
+                  onClick={()=> router.push(`/courses/${data.id}`)}
+                >
+                   View Details
                 </button>
+
+                {/* <Link href={`/courses/${data.id}`} className="w-full mt-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition">
+                  Enroll Now
+                </Link> */}
               </div>
             </div>
           );
