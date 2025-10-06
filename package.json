@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node api.js && next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
+    "start": "node api.js && next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "axios": "^1.12.2",
     "lucide": "^0.544.0",
     "lucide-react": "^0.544.0",

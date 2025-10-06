@@ -1,7 +1,18 @@
+"use client";
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 import { Star } from 'lucide-react';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function testmonial() {
+  useEffect(()=>{
+   Aos.init({
+    duration: 2000, // animation duration in ms
+    once: true,     // whether animation should happen only once
+    easing: 'ease-in-out',
+  });
+   
+  },[])
 
   const testimonials = [
     {
@@ -27,7 +38,7 @@ export default function testmonial() {
   return (
     <section id="testimonials" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div data-aos="fade-up" className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             What Our Students Say
           </h2>

@@ -1,7 +1,21 @@
+'use client';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 import { Star } from 'lucide-react';
-import React from 'react'
+import { useRouter } from 'next/navigation';
+
+import React, { useEffect } from 'react'
 
 export default function courses() {
+  useEffect(()=>{
+   Aos.init({
+    duration: 2000, // animation duration in ms
+    once: true,     // whether animation should happen only once
+    easing: 'ease-in-out',
+  });
+   
+  },[])
+  
  
   const courses = [
     {
@@ -13,27 +27,26 @@ export default function courses() {
       price: "$99"
     },
     {
-      title: "Digital Marketing Mastery",
+      title: " PYthon Master Bootcamp",
       instructor: "Sarah Smith",
       rating: 4.9,
       students: 1800,
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80",
-      price: "$79"
+      image: "/Gemini_Generated_Image_es88ljes88ljes88_b2691d35dd.png"
     },
     {
-      title: "UI/UX Design Fundamentals",
+      title: "PHP for Beginners",
       instructor: "Mike Johnson",
       rating: 4.7,
       students: 3200,
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
-      price: "$89"
+      image: "php_coding_computer_css_data_digital_function_concept_0248b2999e.jpg"
     }
   ];
+  const router = useRouter()
 
   return (
     <section id="courses" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div data-aos="fade-up" className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Popular Courses
           </h2>
@@ -64,7 +77,9 @@ export default function courses() {
                   </div>
                   <div className="text-gray-600 text-sm">{course.students.toLocaleString()} students</div>
                 </div>
-                <button className="w-full mt-4 bg-blue-600 text-white py-3 rounded-full hover:bg-blue-700 transition">
+                <button
+                onClick={()=> router.push('/courses')}
+                className="w-full mt-4 bg-blue-600 text-white py-3 rounded-full hover:bg-blue-700 transition">
                   Enroll Now
                 </button>
               </div>
