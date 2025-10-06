@@ -1,7 +1,19 @@
+"use client";
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 import { ArrowRight, CheckCircle, PlayCircle } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function hero() {
+
+export default function Hero() {
+  useEffect(()=>{
+   Aos.init({
+    duration: 950, // animation duration in ms
+    once: true,     // whether animation should happen only once
+    easing: 'ease-in-out',
+  });
+   
+  },[])
   return (
     <div>
        
@@ -10,11 +22,13 @@ export default function hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+            <h1  className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
               Transform Your Future with
-              <span className="text-blue-600"> CPS Academy</span>
+              <span 
+              
+               className="text-blue-600"> CPS Academy</span>
             </h1>
-            <p className="text-lg text-gray-600">
+            <p data-aos="fade-up"    className="text-lg text-gray-600">
               Master in-demand skills with expert-led courses. Join thousands of students achieving their career goals through our comprehensive learning platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">

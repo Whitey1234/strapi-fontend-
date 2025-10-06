@@ -60,7 +60,7 @@ function CourseDetailsPage() {
              "/php_coding_computer_css_data_digital_function_concept_0248b2999e.jpg",
             
 
-             "/pexels_natalie_bond_320378_1643033_08aa4bb01b.jpg",
+             "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80",
               "/Gemini_Generated_Image_es88ljes88ljes88_b2691d35dd.png",
             
   ];

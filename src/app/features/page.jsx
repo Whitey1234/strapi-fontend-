@@ -1,8 +1,19 @@
+'use client';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 // Features Section Component
 import { Award, BookOpen, PlayCircle, Users } from 'lucide-react';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function features() {
+  useEffect(()=>{
+   Aos.init({
+    duration: 2000, // animation duration in ms
+    once: true,     // whether animation should happen only once
+    easing: 'ease-in-out',
+  });
+   
+  },[])
     const features = [
     {
       icon: <BookOpen className="h-8 w-8" />,
@@ -28,7 +39,7 @@ export default function features() {
   return (
     <section id="features" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div data-aos="fade-up" className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Why Choose CPS Academy?
           </h2>
