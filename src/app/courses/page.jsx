@@ -85,6 +85,7 @@ export default function CoursesPage() {
           const img =
             course.image?.url &&
             `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}` || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80";
+          console.log(img);
 
           return (
             <div
