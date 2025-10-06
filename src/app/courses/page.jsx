@@ -81,11 +81,24 @@ export default function CoursesPage() {
 
       {/* Courses Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {courses.map((course) => {
-          const img =
-            course.image?.url &&
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}` || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80";
-          console.log(img);
+        {courses.map((course, index) => {
+          // const img =
+          //   course.image?.url &&
+          //   `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}` || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80";
+          // console.log(img);
+
+          const staticImages = [
+           
+            "/pexels_natalie_bond_320378_1643033_08aa4bb01b.jpg",
+           
+            "/programming_background_collage_de41715f3a.jpg",
+             "/php_coding_computer_css_data_digital_function_concept_0248b2999e.jpg",
+            
+            "/Gemini_Generated_Image_es88ljes88ljes88_b2691d35dd.png",
+            "/Gemini_Generated_Image_2je7x22je7x22je7_c59fdf9368.png",
+          ];
+
+          const img = staticImages[index % staticImages.length];
 
           return (
             <div
