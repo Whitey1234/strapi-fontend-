@@ -89,7 +89,7 @@ export default function CoursesPage() {
 
           const staticImages = [
            
-            "/pexels_natalie_bond_320378_1643033_08aa4bb01b.jpg",
+            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80",
            
             "/programming_background_collage_de41715f3a.jpg",
              "/php_coding_computer_css_data_digital_function_concept_0248b2999e.jpg",

@@ -2,9 +2,10 @@
 import Nice from "@/components/nice";
 
 import Hero from "@/components/hero";
-import Features from "@/components/features";
+import Features from "@/app/features/page";
 import Courses from "@/components/courses";
-import Testmonial from "@/components/testmonial";
+import Testmonial from "@/app/testimonials/page";
+import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
@@ -12,9 +13,10 @@ export default function Home() {
       {/* <Landing/> */}
       <Hero/>
       <Features/>
-      <Nice/>
+      {/* <Nice/> */}
     <Courses/>
     <Testmonial/>
+    <ContactSection/>
       
     </div>
   );
