@@ -48,9 +48,24 @@ function CourseDetailsPage() {
   if (!course) return <p className="text-center mt-10">Course not found.</p>;
 
   // Construct image URL from Strapi
-  const imageUrl = course.image
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}`
-    : "https://via.placeholder.com/800x400";
+  // const imageUrl = course.image
+  //   ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${course.image.url}`
+  //   : "https://via.placeholder.com/800x400";
+
+  const staticImages = [
+     "/programming_background_collage_de41715f3a.jpg",
+     "/Gemini_Generated_Image_2je7x22je7x22je7_c59fdf9368.png",
+            
+            
+             "/php_coding_computer_css_data_digital_function_concept_0248b2999e.jpg",
+            
+
+             "/pexels_natalie_bond_320378_1643033_08aa4bb01b.jpg",
+              "/Gemini_Generated_Image_es88ljes88ljes88_b2691d35dd.png",
+            
+  ];
+
+  const imageUrl = staticImages[parseInt(courseId) % staticImages.length];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
